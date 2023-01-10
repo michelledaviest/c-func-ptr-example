@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html> 
+
+	<head>
+		<meta charset=utf-8 />
+		<title>Simple Calculator</title>
+		<style type="text/css">
+			body {margin: 30px;}
+		</style> 
+	</head>
+
+	<body>
+		<form>
+			1st Number: <input type="text" id="firstNumber" /><br>
+			2nd Number: <input type="text" id="secondNumber" /><br>
+			Operation (+:1, -:2, *:3): <input type="text" id="op" /><br>
+			<input type="button" onClick="compute()" Value="Calculate" />
+		</form>
+		<p>
+			The Result is : <br>
+			<span id = "result"></span>
+		</p>
+	</body>
+	<script type="text/javascript">
+		
+		var importObject = {
+			imports: { imported_func: arg => console.log(arg) }
+		};
+
+		function compute() { 
+			let num1 = Number(document.getElementById("firstNumber").value);
+			let num2 = Number(document.getElementById("secondNumber").value);
+			let op_val = Number(document.getElementById("op").value);
+			WebAssembly.instantiateStreaming(fetch('add.wasm'), importObject)
+				.then(obj => {
+					document.getElementById("result").innerHTML = obj.instance.exports.temp(num1, num2, op_val);	
+				});				
+		}
+		
+	</script>
+</html>
